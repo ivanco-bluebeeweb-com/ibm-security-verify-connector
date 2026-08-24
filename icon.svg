@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="IBM Security Verify Connector">
+  <defs>
+    <linearGradient id="bg" x1="14" y1="12" x2="114" y2="118" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0F62FE"/>
+      <stop offset="1" stop-color="#002D9C"/>
+    </linearGradient>
+  </defs>
+  <rect x="8" y="8" width="112" height="112" rx="24" fill="url(#bg)"/>
+  <circle cx="64" cy="50" r="18" fill="#ffffff"/>
+  <path d="M32 100c0-17.7 14.3-32 32-32s32 14.3 32 32" fill="none" stroke="#ffffff" stroke-width="8" stroke-linecap="round"/>
+  <path d="M50 50 L58 58 L78 38" fill="none" stroke="#0F62FE" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" opacity="0"/>
+  <rect x="88" y="26" width="18" height="18" rx="4" fill="#78A9FF"/>
+</svg>
