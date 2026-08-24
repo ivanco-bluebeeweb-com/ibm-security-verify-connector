@@ -44,10 +44,10 @@ async def verify_sidebar(ctx, **kwargs) -> ui.UINode:
             ui.Button("How do I get this?", variant="ghost", size="sm", icon="HelpCircle",
                       on_click=ui.Call("__panel__verify_connect_help")),
             ui.Form(action="connect_verify", submit_label="Connect", children=[
-                _field("Tenant label", ui.Input(name="label", placeholder="e.g. Acme Corp Verify")),
-                _field("Tenant hostname", ui.Input(name="tenant_hostname", placeholder="mycompany.verify.ibm.com")),
-                _field("Client ID", ui.Input(name="client_id", placeholder="API client ID")),
-                _field("Client Secret", ui.Password(name="client_secret", placeholder="API client secret")),
+                _field("Tenant label", ui.Input(param_name="label", placeholder="e.g. Acme Corp Verify")),
+                _field("Tenant hostname", ui.Input(param_name="tenant_hostname", placeholder="mycompany.verify.ibm.com")),
+                _field("Client ID", ui.Input(param_name="client_id", placeholder="API client ID")),
+                _field("Client Secret", ui.Password(param_name="client_secret", placeholder="API client secret")),
             ]),
         ])
     buttons = [
