@@ -65,7 +65,7 @@ async def verify_sidebar(ctx, **kwargs) -> ui.UINode:
     ])
 
 
-@ext.panel("verify_connect_help", slot="modal", title="How do I get this?")
+@ext.panel("verify_connect_help", slot="center", title="How do I get this?", center_overlay=True)
 async def verify_connect_help(ctx, **kwargs) -> ui.UINode:
     return ui.Stack(direction="v", gap=3, align="stretch", children=[
         ui.Text("This connects to the IBM Security Verify SaaS tenant (the cloud IDaaS product), not on-premises IBM Security Verify Access (formerly ISAM) — those use a different API.", variant="body"),

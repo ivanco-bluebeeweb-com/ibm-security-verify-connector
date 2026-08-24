@@ -1,0 +1,3536 @@
+{
+  "manifest_schema_version": 3,
+  "sdk_version": "5.11.0",
+  "app_id": "ibm-security-verify-connector",
+  "version": "0.1.0",
+  "name": "IBM Security Verify",
+  "description": "Connect your own IBM Security Verify SaaS tenant to manage Users and Groups (SCIM 2.0), Applications, Access Policies, MFA factors, and review Audit Events for security visibility.",
+  "icon": "icon.svg",
+  "actions_explicit": true,
+  "system": false,
+  "capabilities": [
+    "verify:read",
+    "verify:write"
+  ],
+  "tools": [
+    {
+      "name": "connect_verify",
+      "description": "Connect your own IBM Security Verify SaaS tenant via an API Client (OAuth2 client credentials), after verifying connectivity.",
+      "action_type": "write",
+      "chain_callable": true,
+      "effects": [
+        "verify.provider.connected"
+      ],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "label": {
+            "default": "",
+            "description": "Friendly tenant label, e.g. 'Acme Corp Verify'.",
+            "title": "Label",
+            "type": "string"
+          },
+          "tenant_hostname": {
+            "description": "Tenant hostname, e.g. 'mycompany.verify.ibm.com' (no https://).",
+            "title": "Tenant Hostname",
+            "type": "string"
+          },
+          "client_id": {
+            "description": "API Client's Client ID, from Applications > On-Premises/API clients.",
+            "title": "Client Id",
+            "type": "string"
+          },
+          "client_secret": {
+            "description": "API Client's Client Secret.",
+            "title": "Client Secret",
+            "type": "string"
+          }
+        },
+        "required": [
+          "tenant_hostname",
+          "client_id",
+          "client_secret"
+        ],
+        "title": "ConnectVerifyParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "connection_id": {
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "label": {
+            "title": "Label",
+            "type": "string"
+          },
+          "tenant_hostname": {
+            "title": "Tenant Hostname",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "connection_id",
+          "label",
+          "tenant_hostname"
+        ],
+        "title": "VerifyConnection",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "ibm-security-verify-connector.connect_verify",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "ibm_verify"
+    },
+    {
+      "name": "disconnect_verify",
+      "description": "Disconnect an IBM Security Verify tenant: deletes only the saved credentials. Nothing in Verify itself is changed.",
+      "action_type": "write",
+      "chain_callable": true,
+      "effects": [
+        "verify.provider.disconnected"
+      ],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "description": "Saved IBM Security Verify tenant connection ID to remove from Imperal.",
+            "title": "Connection Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "connection_id"
+        ],
+        "title": "DisconnectVerifyParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "ok": {
+            "title": "Ok",
+            "type": "boolean"
+          },
+          "detail": {
+            "title": "Detail",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "ok",
+          "detail"
+        ],
+        "title": "DeleteResult",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "ibm-security-verify-connector.disconnect_verify",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "ibm_verify"
+    },
+    {
+      "name": "list_connections",
+      "description": "List the connected IBM Security Verify tenants.",
+      "action_type": "read",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {},
+        "title": "NoParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "$defs": {
+          "VerifyConnection": {
+            "properties": {
+              "id": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "integer"
+                  }
+                ],
+                "title": "Id"
+              },
+              "title": {
+                "title": "Title",
+                "type": "string"
+              },
+              "kind": {
+                "default": "",
+                "title": "Kind",
+                "type": "string"
+              },
+              "subtitle": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Subtitle"
+              },
+              "description": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Description"
+              },
+              "status": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Status"
+              },
+              "url": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Url"
+              },
+              "connection_id": {
+                "title": "Connection Id",
+                "type": "string"
+              },
+              "label": {
+                "title": "Label",
+                "type": "string"
+              },
+              "tenant_hostname": {
+                "title": "Tenant Hostname",
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "title",
+              "connection_id",
+              "label",
+              "tenant_hostname"
+            ],
+            "title": "VerifyConnection",
+            "type": "object",
+            "x-sdl": "entity"
+          }
+        },
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "connections": {
+            "items": {
+              "$ref": "#/$defs/VerifyConnection"
+            },
+            "title": "Connections",
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "connections"
+        ],
+        "title": "ConnectionList",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "ibm-security-verify-connector.list_connections",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "ibm_verify"
+    },
+    {
+      "name": "list_users",
+      "description": "List users in the connected IBM Security Verify tenant, optionally filtered by a SCIM filter string.",
+      "action_type": "read",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "Optional saved IBM Security Verify tenant connection ID. Omit to use the first connected tenant.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "q": {
+            "default": "",
+            "description": "Optional SCIM filter fragment, e.g. 'userName sw \"jane\"'.",
+            "title": "Q",
+            "type": "string"
+          },
+          "limit": {
+            "default": 50,
+            "description": "Max users to return (1-200).",
+            "title": "Limit",
+            "type": "integer"
+          }
+        },
+        "title": "ListUsersParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "$defs": {
+          "VerifyUser": {
+            "properties": {
+              "id": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "integer"
+                  }
+                ],
+                "title": "Id"
+              },
+              "title": {
+                "title": "Title",
+                "type": "string"
+              },
+              "kind": {
+                "default": "",
+                "title": "Kind",
+                "type": "string"
+              },
+              "subtitle": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Subtitle"
+              },
+              "description": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Description"
+              },
+              "status": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Status"
+              },
+              "url": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Url"
+              },
+              "user_id": {
+                "title": "User Id",
+                "type": "string"
+              },
+              "user_name": {
+                "title": "User Name",
+                "type": "string"
+              },
+              "given_name": {
+                "title": "Given Name",
+                "type": "string"
+              },
+              "family_name": {
+                "title": "Family Name",
+                "type": "string"
+              },
+              "email": {
+                "title": "Email",
+                "type": "string"
+              },
+              "active": {
+                "title": "Active",
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "id",
+              "title",
+              "user_id",
+              "user_name",
+              "given_name",
+              "family_name",
+              "email",
+              "active"
+            ],
+            "title": "VerifyUser",
+            "type": "object",
+            "x-sdl": "entity"
+          }
+        },
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "users": {
+            "items": {
+              "$ref": "#/$defs/VerifyUser"
+            },
+            "title": "Users",
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "users"
+        ],
+        "title": "UserList",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "ibm-security-verify-connector.list_users",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "ibm_verify"
+    },
+    {
+      "name": "get_user",
+      "description": "Read one IBM Security Verify user in full by SCIM id.",
+      "action_type": "read",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "Optional saved IBM Security Verify tenant connection ID. Omit to use the first connected tenant.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "user_id": {
+            "description": "IBM Security Verify SCIM user id.",
+            "title": "User Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "user_id"
+        ],
+        "title": "UserIdParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "user_id": {
+            "title": "User Id",
+            "type": "string"
+          },
+          "user_name": {
+            "title": "User Name",
+            "type": "string"
+          },
+          "given_name": {
+            "title": "Given Name",
+            "type": "string"
+          },
+          "family_name": {
+            "title": "Family Name",
+            "type": "string"
+          },
+          "email": {
+            "title": "Email",
+            "type": "string"
+          },
+          "active": {
+            "title": "Active",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "user_id",
+          "user_name",
+          "given_name",
+          "family_name",
+          "email",
+          "active"
+        ],
+        "title": "VerifyUser",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "ibm-security-verify-connector.get_user",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "ibm_verify"
+    },
+    {
+      "name": "create_user",
+      "description": "Create a new IBM Security Verify user via SCIM.",
+      "action_type": "write",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "Optional saved IBM Security Verify tenant connection ID. Omit to use the first connected tenant.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "user_name": {
+            "description": "SCIM userName (usually the login/email).",
+            "title": "User Name",
+            "type": "string"
+          },
+          "given_name": {
+            "description": "First name.",
+            "title": "Given Name",
+            "type": "string"
+          },
+          "family_name": {
+            "description": "Last name.",
+            "title": "Family Name",
+            "type": "string"
+          },
+          "email": {
+            "description": "Primary email address.",
+            "title": "Email",
+            "type": "string"
+          }
+        },
+        "required": [
+          "user_name",
+          "given_name",
+          "family_name",
+          "email"
+        ],
+        "title": "CreateUserParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "user_id": {
+            "title": "User Id",
+            "type": "string"
+          },
+          "user_name": {
+            "title": "User Name",
+            "type": "string"
+          },
+          "given_name": {
+            "title": "Given Name",
+            "type": "string"
+          },
+          "family_name": {
+            "title": "Family Name",
+            "type": "string"
+          },
+          "email": {
+            "title": "Email",
+            "type": "string"
+          },
+          "active": {
+            "title": "Active",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "user_id",
+          "user_name",
+          "given_name",
+          "family_name",
+          "email",
+          "active"
+        ],
+        "title": "VerifyUser",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "ibm-security-verify-connector.create_user",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "ibm_verify"
+    },
+    {
+      "name": "update_user",
+      "description": "Update selected fields of an existing IBM Security Verify user (active state and/or name). Only given fields change.",
+      "action_type": "write",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "Optional saved IBM Security Verify tenant connection ID. Omit to use the first connected tenant.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "user_id": {
+            "description": "IBM Security Verify SCIM user id.",
+            "title": "User Id",
+            "type": "string"
+          },
+          "active": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Set true to enable, false to disable sign-in. Omit to leave unchanged.",
+            "title": "Active"
+          },
+          "given_name": {
+            "default": "",
+            "description": "New first name, or leave blank to keep unchanged.",
+            "title": "Given Name",
+            "type": "string"
+          },
+          "family_name": {
+            "default": "",
+            "description": "New last name, or leave blank to keep unchanged.",
+            "title": "Family Name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "user_id"
+        ],
+        "title": "UpdateUserParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "user_id": {
+            "title": "User Id",
+            "type": "string"
+          },
+          "user_name": {
+            "title": "User Name",
+            "type": "string"
+          },
+          "given_name": {
+            "title": "Given Name",
+            "type": "string"
+          },
+          "family_name": {
+            "title": "Family Name",
+            "type": "string"
+          },
+          "email": {
+            "title": "Email",
+            "type": "string"
+          },
+          "active": {
+            "title": "Active",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "user_id",
+          "user_name",
+          "given_name",
+          "family_name",
+          "email",
+          "active"
+        ],
+        "title": "VerifyUser",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "ibm-security-verify-connector.update_user",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "ibm_verify"
+    },
+    {
+      "name": "delete_user",
+      "description": "Permanently delete an IBM Security Verify user via SCIM. Cannot be undone -- unlike Okta's deactivate, this is a hard delete.",
+      "action_type": "write",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "Optional saved IBM Security Verify tenant connection ID. Omit to use the first connected tenant.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "user_id": {
+            "description": "IBM Security Verify SCIM user id.",
+            "title": "User Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "user_id"
+        ],
+        "title": "UserIdParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "ok": {
+            "title": "Ok",
+            "type": "boolean"
+          },
+          "detail": {
+            "title": "Detail",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "ok",
+          "detail"
+        ],
+        "title": "DeleteResult",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "ibm-security-verify-connector.delete_user",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "ibm_verify"
+    },
+    {
+      "name": "list_groups",
+      "description": "List groups in the connected IBM Security Verify tenant.",
+      "action_type": "read",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "Optional saved IBM Security Verify tenant connection ID. Omit to use the first connected tenant.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "q": {
+            "default": "",
+            "description": "Optional SCIM filter fragment, e.g. 'displayName sw \"Eng\"'.",
+            "title": "Q",
+            "type": "string"
+          },
+          "limit": {
+            "default": 50,
+            "description": "Max groups to return (1-200).",
+            "title": "Limit",
+            "type": "integer"
+          }
+        },
+        "title": "ListGroupsParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "$defs": {
+          "VerifyGroup": {
+            "properties": {
+              "id": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "integer"
+                  }
+                ],
+                "title": "Id"
+              },
+              "title": {
+                "title": "Title",
+                "type": "string"
+              },
+              "kind": {
+                "default": "",
+                "title": "Kind",
+                "type": "string"
+              },
+              "subtitle": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Subtitle"
+              },
+              "description": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Description"
+              },
+              "status": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Status"
+              },
+              "url": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Url"
+              },
+              "group_id": {
+                "title": "Group Id",
+                "type": "string"
+              },
+              "display_name": {
+                "title": "Display Name",
+                "type": "string"
+              },
+              "member_count": {
+                "title": "Member Count",
+                "type": "integer"
+              }
+            },
+            "required": [
+              "id",
+              "title",
+              "group_id",
+              "display_name",
+              "member_count"
+            ],
+            "title": "VerifyGroup",
+            "type": "object",
+            "x-sdl": "entity"
+          }
+        },
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "groups": {
+            "items": {
+              "$ref": "#/$defs/VerifyGroup"
+            },
+            "title": "Groups",
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "groups"
+        ],
+        "title": "GroupList",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "ibm-security-verify-connector.list_groups",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "ibm_verify"
+    },
+    {
+      "name": "get_group",
+      "description": "Read one IBM Security Verify group in full.",
+      "action_type": "read",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "Optional saved IBM Security Verify tenant connection ID. Omit to use the first connected tenant.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "group_id": {
+            "description": "IBM Security Verify SCIM group id.",
+            "title": "Group Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "group_id"
+        ],
+        "title": "GroupIdParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "group_id": {
+            "title": "Group Id",
+            "type": "string"
+          },
+          "display_name": {
+            "title": "Display Name",
+            "type": "string"
+          },
+          "member_count": {
+            "title": "Member Count",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "group_id",
+          "display_name",
+          "member_count"
+        ],
+        "title": "VerifyGroup",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "ibm-security-verify-connector.get_group",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "ibm_verify"
+    },
+    {
+      "name": "create_group",
+      "description": "Create a new IBM Security Verify group.",
+      "action_type": "write",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "Optional saved IBM Security Verify tenant connection ID. Omit to use the first connected tenant.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "display_name": {
+            "description": "Group display name.",
+            "title": "Display Name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "display_name"
+        ],
+        "title": "CreateGroupParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "group_id": {
+            "title": "Group Id",
+            "type": "string"
+          },
+          "display_name": {
+            "title": "Display Name",
+            "type": "string"
+          },
+          "member_count": {
+            "title": "Member Count",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "group_id",
+          "display_name",
+          "member_count"
+        ],
+        "title": "VerifyGroup",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "ibm-security-verify-connector.create_group",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "ibm_verify"
+    },
+    {
+      "name": "add_user_to_group",
+      "description": "Add a user to an IBM Security Verify group.",
+      "action_type": "write",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "Optional saved IBM Security Verify tenant connection ID. Omit to use the first connected tenant.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "group_id": {
+            "description": "IBM Security Verify SCIM group id.",
+            "title": "Group Id",
+            "type": "string"
+          },
+          "user_id": {
+            "description": "IBM Security Verify SCIM user id to add/remove.",
+            "title": "User Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "group_id",
+          "user_id"
+        ],
+        "title": "GroupMemberParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "ok": {
+            "title": "Ok",
+            "type": "boolean"
+          },
+          "detail": {
+            "title": "Detail",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "ok",
+          "detail"
+        ],
+        "title": "DeleteResult",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "ibm-security-verify-connector.add_user_to_group",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "ibm_verify"
+    },
+    {
+      "name": "remove_user_from_group",
+      "description": "Remove a user from an IBM Security Verify group.",
+      "action_type": "write",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "Optional saved IBM Security Verify tenant connection ID. Omit to use the first connected tenant.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "group_id": {
+            "description": "IBM Security Verify SCIM group id.",
+            "title": "Group Id",
+            "type": "string"
+          },
+          "user_id": {
+            "description": "IBM Security Verify SCIM user id to add/remove.",
+            "title": "User Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "group_id",
+          "user_id"
+        ],
+        "title": "GroupMemberParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "ok": {
+            "title": "Ok",
+            "type": "boolean"
+          },
+          "detail": {
+            "title": "Detail",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "ok",
+          "detail"
+        ],
+        "title": "DeleteResult",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "ibm-security-verify-connector.remove_user_from_group",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "ibm_verify"
+    },
+    {
+      "name": "list_applications",
+      "description": "List OIDC/SAML application registrations in the connected IBM Security Verify tenant.",
+      "action_type": "read",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "Optional saved IBM Security Verify tenant connection ID. Omit to use the first connected tenant.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "limit": {
+            "default": 50,
+            "description": "Max applications to return (1-200).",
+            "title": "Limit",
+            "type": "integer"
+          }
+        },
+        "title": "ListApplicationsParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "$defs": {
+          "VerifyApplication": {
+            "properties": {
+              "id": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "integer"
+                  }
+                ],
+                "title": "Id"
+              },
+              "title": {
+                "title": "Title",
+                "type": "string"
+              },
+              "kind": {
+                "default": "",
+                "title": "Kind",
+                "type": "string"
+              },
+              "subtitle": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Subtitle"
+              },
+              "description": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Description"
+              },
+              "status": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Status"
+              },
+              "url": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Url"
+              },
+              "application_id": {
+                "title": "Application Id",
+                "type": "string"
+              },
+              "name": {
+                "title": "Name",
+                "type": "string"
+              },
+              "app_type": {
+                "title": "App Type",
+                "type": "string"
+              },
+              "enabled": {
+                "title": "Enabled",
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "id",
+              "title",
+              "application_id",
+              "name",
+              "app_type",
+              "enabled"
+            ],
+            "title": "VerifyApplication",
+            "type": "object",
+            "x-sdl": "entity"
+          }
+        },
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "applications": {
+            "items": {
+              "$ref": "#/$defs/VerifyApplication"
+            },
+            "title": "Applications",
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "applications"
+        ],
+        "title": "ApplicationList",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "ibm-security-verify-connector.list_applications",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "ibm_verify"
+    },
+    {
+      "name": "get_application",
+      "description": "Read one IBM Security Verify application registration in full.",
+      "action_type": "read",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "Optional saved IBM Security Verify tenant connection ID. Omit to use the first connected tenant.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "application_id": {
+            "description": "IBM Security Verify application id.",
+            "title": "Application Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "application_id"
+        ],
+        "title": "ApplicationIdParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "application_id": {
+            "title": "Application Id",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "app_type": {
+            "title": "App Type",
+            "type": "string"
+          },
+          "enabled": {
+            "title": "Enabled",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "application_id",
+          "name",
+          "app_type",
+          "enabled"
+        ],
+        "title": "VerifyApplication",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "ibm-security-verify-connector.get_application",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "ibm_verify"
+    },
+    {
+      "name": "list_policies",
+      "description": "List Access Policies (risk-based authentication policies) configured on the connected IBM Security Verify tenant (read-only).",
+      "action_type": "read",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "Optional saved IBM Security Verify tenant connection ID. Omit to use the first connected tenant.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "limit": {
+            "default": 50,
+            "description": "Max access policies to return (1-200).",
+            "title": "Limit",
+            "type": "integer"
+          }
+        },
+        "title": "ListPoliciesParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "$defs": {
+          "VerifyPolicy": {
+            "properties": {
+              "id": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "integer"
+                  }
+                ],
+                "title": "Id"
+              },
+              "title": {
+                "title": "Title",
+                "type": "string"
+              },
+              "kind": {
+                "default": "",
+                "title": "Kind",
+                "type": "string"
+              },
+              "subtitle": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Subtitle"
+              },
+              "description": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Description"
+              },
+              "status": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Status"
+              },
+              "url": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Url"
+              },
+              "policy_id": {
+                "title": "Policy Id",
+                "type": "string"
+              },
+              "name": {
+                "title": "Name",
+                "type": "string"
+              },
+              "enabled": {
+                "title": "Enabled",
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "id",
+              "title",
+              "policy_id",
+              "name",
+              "enabled"
+            ],
+            "title": "VerifyPolicy",
+            "type": "object",
+            "x-sdl": "entity"
+          }
+        },
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "policies": {
+            "items": {
+              "$ref": "#/$defs/VerifyPolicy"
+            },
+            "title": "Policies",
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "policies"
+        ],
+        "title": "PolicyList",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "ibm-security-verify-connector.list_policies",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "ibm_verify"
+    },
+    {
+      "name": "get_policy",
+      "description": "Read one IBM Security Verify Access Policy in full (read-only).",
+      "action_type": "read",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "Optional saved IBM Security Verify tenant connection ID. Omit to use the first connected tenant.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "policy_id": {
+            "description": "IBM Security Verify access policy id.",
+            "title": "Policy Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "policy_id"
+        ],
+        "title": "PolicyIdParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "policy_id": {
+            "title": "Policy Id",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "enabled": {
+            "title": "Enabled",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "policy_id",
+          "name",
+          "enabled"
+        ],
+        "title": "VerifyPolicy",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "ibm-security-verify-connector.get_policy",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "ibm_verify"
+    },
+    {
+      "name": "list_user_mfa_factors",
+      "description": "List MFA factors enrolled for an IBM Security Verify user.",
+      "action_type": "read",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "Optional saved IBM Security Verify tenant connection ID. Omit to use the first connected tenant.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "user_id": {
+            "description": "IBM Security Verify SCIM user id.",
+            "title": "User Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "user_id"
+        ],
+        "title": "ListMfaFactorsParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "$defs": {
+          "VerifyMfaFactor": {
+            "properties": {
+              "id": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "integer"
+                  }
+                ],
+                "title": "Id"
+              },
+              "title": {
+                "title": "Title",
+                "type": "string"
+              },
+              "kind": {
+                "default": "",
+                "title": "Kind",
+                "type": "string"
+              },
+              "subtitle": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Subtitle"
+              },
+              "description": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Description"
+              },
+              "status": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Status"
+              },
+              "url": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Url"
+              },
+              "factor_id": {
+                "title": "Factor Id",
+                "type": "string"
+              },
+              "factor_type": {
+                "title": "Factor Type",
+                "type": "string"
+              },
+              "enrolled_at": {
+                "title": "Enrolled At",
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "title",
+              "factor_id",
+              "factor_type",
+              "enrolled_at"
+            ],
+            "title": "VerifyMfaFactor",
+            "type": "object",
+            "x-sdl": "entity"
+          }
+        },
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "factors": {
+            "items": {
+              "$ref": "#/$defs/VerifyMfaFactor"
+            },
+            "title": "Factors",
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "factors"
+        ],
+        "title": "MfaFactorList",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "ibm-security-verify-connector.list_user_mfa_factors",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "ibm_verify"
+    },
+    {
+      "name": "remove_user_mfa_factor",
+      "description": "Remove one enrolled MFA factor from an IBM Security Verify user -- use when a user has lost their device and needs help re-enrolling.",
+      "action_type": "write",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "Optional saved IBM Security Verify tenant connection ID. Omit to use the first connected tenant.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "user_id": {
+            "description": "IBM Security Verify SCIM user id.",
+            "title": "User Id",
+            "type": "string"
+          },
+          "factor_id": {
+            "description": "Enrolled MFA factor id to remove, from list_user_mfa_factors.",
+            "title": "Factor Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "user_id",
+          "factor_id"
+        ],
+        "title": "RemoveMfaFactorParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "ok": {
+            "title": "Ok",
+            "type": "boolean"
+          },
+          "detail": {
+            "title": "Detail",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "ok",
+          "detail"
+        ],
+        "title": "DeleteResult",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "ibm-security-verify-connector.remove_user_mfa_factor",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "ibm_verify"
+    },
+    {
+      "name": "list_audit_events",
+      "description": "List Audit Events (the audit trail of logins, admin actions, and policy evaluations) on the connected IBM Security Verify tenant.",
+      "action_type": "read",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "Optional saved IBM Security Verify tenant connection ID. Omit to use the first connected tenant.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "event_type": {
+            "default": "",
+            "description": "Optional filter: only events of this type, e.g. 'authentication'.",
+            "title": "Event Type",
+            "type": "string"
+          },
+          "limit": {
+            "default": 50,
+            "description": "Max audit events to return (1-200).",
+            "title": "Limit",
+            "type": "integer"
+          }
+        },
+        "title": "ListAuditEventsParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "$defs": {
+          "VerifyAuditEvent": {
+            "properties": {
+              "id": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "integer"
+                  }
+                ],
+                "title": "Id"
+              },
+              "title": {
+                "title": "Title",
+                "type": "string"
+              },
+              "kind": {
+                "default": "",
+                "title": "Kind",
+                "type": "string"
+              },
+              "subtitle": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Subtitle"
+              },
+              "description": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Description"
+              },
+              "status": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Status"
+              },
+              "url": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Url"
+              },
+              "event_id": {
+                "title": "Event Id",
+                "type": "string"
+              },
+              "event_type": {
+                "title": "Event Type",
+                "type": "string"
+              },
+              "actor": {
+                "title": "Actor",
+                "type": "string"
+              },
+              "result": {
+                "title": "Result",
+                "type": "string"
+              },
+              "recorded_at": {
+                "title": "Recorded At",
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "title",
+              "event_id",
+              "event_type",
+              "actor",
+              "result",
+              "recorded_at"
+            ],
+            "title": "VerifyAuditEvent",
+            "type": "object",
+            "x-sdl": "entity"
+          }
+        },
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "events": {
+            "items": {
+              "$ref": "#/$defs/VerifyAuditEvent"
+            },
+            "title": "Events",
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "events"
+        ],
+        "title": "AuditEventList",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "ibm-security-verify-connector.list_audit_events",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "ibm_verify"
+    },
+    {
+      "name": "audit_tenant",
+      "description": "Build one aggregated health report for the connected IBM Security Verify tenant: total/disabled user counts, group/application counts, and recent failed logins.",
+      "action_type": "read",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "Optional saved IBM Security Verify tenant connection ID. Omit to use the first connected tenant.",
+            "title": "Connection Id",
+            "type": "string"
+          }
+        },
+        "title": "ConnectionRefParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "total_users": {
+            "title": "Total Users",
+            "type": "integer"
+          },
+          "disabled_users": {
+            "title": "Disabled Users",
+            "type": "integer"
+          },
+          "total_groups": {
+            "title": "Total Groups",
+            "type": "integer"
+          },
+          "total_applications": {
+            "title": "Total Applications",
+            "type": "integer"
+          },
+          "recent_failed_logins": {
+            "title": "Recent Failed Logins",
+            "type": "integer"
+          },
+          "summary": {
+            "title": "Summary",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "total_users",
+          "disabled_users",
+          "total_groups",
+          "total_applications",
+          "recent_failed_logins",
+          "summary"
+        ],
+        "title": "HealthAudit",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "ibm-security-verify-connector.audit_tenant",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "ibm_verify"
+    }
+  ],
+  "signals": [],
+  "schedules": [],
+  "required_scopes": [],
+  "icon_size_bytes": 807,
+  "lifecycle": {
+    "health_check": {
+      "interval_sec": 60
+    }
+  },
+  "secrets": [
+    {
+      "name": "verify_connections",
+      "description": "JSON list of connected IBM Security Verify tenants and encrypted API client credentials. Managed only through connect_verify and disconnect_verify.",
+      "required": true,
+      "write_mode": "both",
+      "max_bytes": 65536,
+      "scope": "user",
+      "rotation_hint_days": 90
+    }
+  ],
+  "panels": [
+    {
+      "panel_id": "secrets",
+      "slot": "right",
+      "title": "Secrets",
+      "tree": {},
+      "icon": "KeyRound",
+      "refresh": "manual",
+      "center_overlay": false
+    },
+    {
+      "panel_id": "verify_sidebar",
+      "slot": "left",
+      "title": "IBM Security Verify",
+      "tree": {},
+      "icon": "",
+      "refresh": "manual",
+      "center_overlay": false
+    },
+    {
+      "panel_id": "verify_connect_help",
+      "slot": "center",
+      "title": "How do I get this?",
+      "tree": {},
+      "icon": "",
+      "refresh": "manual",
+      "center_overlay": true
+    },
+    {
+      "panel_id": "verify_users",
+      "slot": "center",
+      "title": "Users",
+      "tree": {},
+      "icon": "",
+      "refresh": "manual",
+      "center_overlay": true
+    },
+    {
+      "panel_id": "verify_groups",
+      "slot": "center",
+      "title": "Groups",
+      "tree": {},
+      "icon": "",
+      "refresh": "manual",
+      "center_overlay": true
+    },
+    {
+      "panel_id": "verify_applications",
+      "slot": "center",
+      "title": "Applications",
+      "tree": {},
+      "icon": "",
+      "refresh": "manual",
+      "center_overlay": true
+    },
+    {
+      "panel_id": "verify_policies",
+      "slot": "center",
+      "title": "Access Policies",
+      "tree": {},
+      "icon": "",
+      "refresh": "manual",
+      "center_overlay": true
+    },
+    {
+      "panel_id": "verify_audit_events",
+      "slot": "center",
+      "title": "Audit Events",
+      "tree": {},
+      "icon": "",
+      "refresh": "manual",
+      "center_overlay": true
+    },
+    {
+      "panel_id": "verify_settings",
+      "slot": "center",
+      "title": "IBM Security Verify settings",
+      "tree": {},
+      "icon": "Settings",
+      "refresh": "manual",
+      "center_overlay": true
+    }
+  ]
+}
