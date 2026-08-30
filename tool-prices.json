@@ -1,0 +1,23 @@
+{
+  "add_user_to_group": 16,
+  "audit_tenant": 40,
+  "connect_verify": 0,
+  "create_group": 16,
+  "create_user": 16,
+  "delete_user": 20,
+  "disconnect_verify": 0,
+  "get_application": 8,
+  "get_group": 8,
+  "get_policy": 8,
+  "get_user": 8,
+  "list_applications": 8,
+  "list_audit_events": 8,
+  "list_connections": 0,
+  "list_groups": 8,
+  "list_policies": 8,
+  "list_user_mfa_factors": 8,
+  "list_users": 8,
+  "remove_user_from_group": 20,
+  "remove_user_mfa_factor": 20,
+  "update_user": 16
+}
