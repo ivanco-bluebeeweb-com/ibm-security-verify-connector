@@ -97,16 +97,22 @@ class ListAuditEventsParams(ConnectionRefParams):
 # ---- SDL entities ----
 
 class VerifyConnection(sdl.Entity):
+    id: str = ""
+    title: str = ""
     connection_id: str
     label: str
     tenant_hostname: str
 
 
 class ConnectionList(sdl.Entity):
+    id: str = ""
+    title: str = ""
     connections: list[VerifyConnection]
 
 
 class VerifyUser(sdl.Entity):
+    id: str = ""
+    title: str = ""
     user_id: str
     user_name: str
     given_name: str
@@ -116,20 +122,28 @@ class VerifyUser(sdl.Entity):
 
 
 class UserList(sdl.Entity):
+    id: str = ""
+    title: str = ""
     users: list[VerifyUser]
 
 
 class VerifyGroup(sdl.Entity):
+    id: str = ""
+    title: str = ""
     group_id: str
     display_name: str
     member_count: int
 
 
 class GroupList(sdl.Entity):
+    id: str = ""
+    title: str = ""
     groups: list[VerifyGroup]
 
 
 class VerifyApplication(sdl.Entity):
+    id: str = ""
+    title: str = ""
     application_id: str
     name: str
     app_type: str
@@ -137,30 +151,42 @@ class VerifyApplication(sdl.Entity):
 
 
 class ApplicationList(sdl.Entity):
+    id: str = ""
+    title: str = ""
     applications: list[VerifyApplication]
 
 
 class VerifyPolicy(sdl.Entity):
+    id: str = ""
+    title: str = ""
     policy_id: str
     name: str
     enabled: bool
 
 
 class PolicyList(sdl.Entity):
+    id: str = ""
+    title: str = ""
     policies: list[VerifyPolicy]
 
 
 class VerifyMfaFactor(sdl.Entity):
+    id: str = ""
+    title: str = ""
     factor_id: str
     factor_type: str
     enrolled_at: str
 
 
 class MfaFactorList(sdl.Entity):
+    id: str = ""
+    title: str = ""
     factors: list[VerifyMfaFactor]
 
 
 class VerifyAuditEvent(sdl.Entity):
+    id: str = ""
+    title: str = ""
     event_id: str
     event_type: str
     actor: str
@@ -169,15 +195,21 @@ class VerifyAuditEvent(sdl.Entity):
 
 
 class AuditEventList(sdl.Entity):
+    id: str = ""
+    title: str = ""
     events: list[VerifyAuditEvent]
 
 
 class DeleteResult(sdl.Entity):
+    id: str = ""
+    title: str = ""
     ok: bool
     detail: str
 
 
 class HealthAudit(sdl.Entity):
+    id: str = ""
+    title: str = ""
     total_users: int
     disabled_users: int
     total_groups: int
