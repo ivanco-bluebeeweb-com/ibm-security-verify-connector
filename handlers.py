@@ -84,7 +84,7 @@ async def connect_verify(ctx, params: ConnectVerifyParams) -> ActionResult:
     }
     connections.append(entry)
     await _save_connections(ctx, connections)
-    return ActionResult.success(data=_connection_entity(entry), message="Connected to IBM Security Verify.")
+    return ActionResult.success(data=_connection_entity(entry), message="Connected to IBM Security Verify.", summary="Verify connected.")
 
 
 @chat.function("disconnect_verify", "Disconnect an IBM Security Verify tenant: deletes only the saved credentials. Nothing in Verify itself is changed.", action_type="write", chain_callable=True, data_model=DeleteResult, event="ibm-security-verify-connector.disconnect_verify", effects=["verify.provider.disconnected"])
@@ -95,14 +95,14 @@ async def disconnect_verify(ctx, params: DisconnectVerifyParams) -> ActionResult
     if len(remaining) == len(connections):
         return ActionResult.error(f"No saved IBM Security Verify connection with id '{params.connection_id}'.")
     await _save_connections(ctx, remaining)
-    return ActionResult.success(data=DeleteResult(ok=True, detail=params.connection_id), message="Disconnected from IBM Security Verify.")
+    return ActionResult.success(data=DeleteResult(ok=True, detail=params.connection_id), message="Disconnected from IBM Security Verify.", summary="Verify disconnected.")
 
 
 @chat.function("list_connections", "List the connected IBM Security Verify tenants.", action_type="read", chain_callable=True, data_model=ConnectionList, event="ibm-security-verify-connector.list_connections")
 async def list_connections(ctx, params: NoParams) -> ActionResult:
     """List the connected IBM Security Verify tenants."""
     connections = await _load_connections(ctx)
-    return ActionResult.success(data=ConnectionList(connections=[_connection_entity(c) for c in connections]))
+    return ActionResult.success(data=ConnectionList(connections=[_connection_entity(c) for c in connections]), summary="Connections listed.")
 
 
 def _user_entity(u: dict) -> VerifyUser:
@@ -132,7 +132,7 @@ async def list_users(ctx, params: ListUsersParams) -> ActionResult:
     except vc.VerifyError as exc:
         return ActionResult.error(str(exc), retryable=exc.retryable)
     items = (data or {}).get("Resources", [])
-    return ActionResult.success(data=UserList(users=[_user_entity(u) for u in items]))
+    return ActionResult.success(data=UserList(users=[_user_entity(u) for u in items]), summary="Users listed.")
 
 
 @chat.function("get_user", "Read one IBM Security Verify user in full by SCIM id.", action_type="read", chain_callable=True, data_model=VerifyUser, event="ibm-security-verify-connector.get_user")
@@ -144,7 +144,7 @@ async def get_user(ctx, params: UserIdParams) -> ActionResult:
         data, _ = await client.request("GET", f"/v2.0/Users/{params.user_id}")
     except vc.VerifyError as exc:
         return ActionResult.error(str(exc), retryable=exc.retryable)
-    return ActionResult.success(data=_user_entity(data or {}))
+    return ActionResult.success(data=_user_entity(data or {}), summary="User retrieved.")
 
 
 @chat.function("create_user", "Create a new IBM Security Verify user via SCIM.", action_type="write", chain_callable=True, data_model=VerifyUser, event="ibm-security-verify-connector.create_user")
@@ -163,7 +163,7 @@ async def create_user(ctx, params: CreateUserParams) -> ActionResult:
         data, _ = await client.request("POST", "/v2.0/Users", json_body=body)
     except vc.VerifyError as exc:
         return ActionResult.error(str(exc), retryable=exc.retryable)
-    return ActionResult.success(data=_user_entity(data or {}), message="User created.")
+    return ActionResult.success(data=_user_entity(data or {}), message="User created.", summary="User created.")
 
 
 @chat.function("update_user", "Update selected fields of an existing IBM Security Verify user (active state and/or name). Only given fields change.", action_type="write", chain_callable=True, data_model=VerifyUser, event="ibm-security-verify-connector.update_user")
@@ -188,7 +188,7 @@ async def update_user(ctx, params: UpdateUserParams) -> ActionResult:
         data, _ = await client.request("PATCH", f"/v2.0/Users/{params.user_id}", json_body=body)
     except vc.VerifyError as exc:
         return ActionResult.error(str(exc), retryable=exc.retryable)
-    return ActionResult.success(data=_user_entity(data or {}), message="User updated.")
+    return ActionResult.success(data=_user_entity(data or {}), message="User updated.", summary="User updated.")
 
 
 @chat.function("delete_user", "Permanently delete an IBM Security Verify user via SCIM. Cannot be undone -- unlike Okta's deactivate, this is a hard delete.", action_type="write", chain_callable=True, data_model=DeleteResult, event="ibm-security-verify-connector.delete_user")
@@ -200,7 +200,7 @@ async def delete_user(ctx, params: UserIdParams) -> ActionResult:
         await client.request("DELETE", f"/v2.0/Users/{params.user_id}")
     except vc.VerifyError as exc:
         return ActionResult.error(str(exc), retryable=exc.retryable)
-    return ActionResult.success(data=DeleteResult(ok=True, detail=params.user_id), message="User permanently deleted.")
+    return ActionResult.success(data=DeleteResult(ok=True, detail=params.user_id), message="User permanently deleted.", summary="User deleted.")
 
 
 def _group_entity(g: dict) -> VerifyGroup:
@@ -225,7 +225,7 @@ async def list_groups(ctx, params: ListGroupsParams) -> ActionResult:
     except vc.VerifyError as exc:
         return ActionResult.error(str(exc), retryable=exc.retryable)
     items = (data or {}).get("Resources", [])
-    return ActionResult.success(data=GroupList(groups=[_group_entity(g) for g in items]))
+    return ActionResult.success(data=GroupList(groups=[_group_entity(g) for g in items]), summary="Groups listed.")
 
 
 @chat.function("get_group", "Read one IBM Security Verify group in full.", action_type="read", chain_callable=True, data_model=VerifyGroup, event="ibm-security-verify-connector.get_group")
@@ -237,7 +237,7 @@ async def get_group(ctx, params: GroupIdParams) -> ActionResult:
         data, _ = await client.request("GET", f"/v2.0/Groups/{params.group_id}")
     except vc.VerifyError as exc:
         return ActionResult.error(str(exc), retryable=exc.retryable)
-    return ActionResult.success(data=_group_entity(data or {}))
+    return ActionResult.success(data=_group_entity(data or {}), summary="Group retrieved.")
 
 
 @chat.function("create_group", "Create a new IBM Security Verify group.", action_type="write", chain_callable=True, data_model=VerifyGroup, event="ibm-security-verify-connector.create_group")
@@ -253,7 +253,7 @@ async def create_group(ctx, params: CreateGroupParams) -> ActionResult:
         data, _ = await client.request("POST", "/v2.0/Groups", json_body=body)
     except vc.VerifyError as exc:
         return ActionResult.error(str(exc), retryable=exc.retryable)
-    return ActionResult.success(data=_group_entity(data or {}), message="Group created.")
+    return ActionResult.success(data=_group_entity(data or {}), message="Group created.", summary="Group created.")
 
 
 @chat.function("add_user_to_group", "Add a user to an IBM Security Verify group.", action_type="write", chain_callable=True, data_model=DeleteResult, event="ibm-security-verify-connector.add_user_to_group")
@@ -269,7 +269,7 @@ async def add_user_to_group(ctx, params: GroupMemberParams) -> ActionResult:
         await client.request("PATCH", f"/v2.0/Groups/{params.group_id}", json_body=body)
     except vc.VerifyError as exc:
         return ActionResult.error(str(exc), retryable=exc.retryable)
-    return ActionResult.success(data=DeleteResult(ok=True, detail=params.user_id), message="User added to group.")
+    return ActionResult.success(data=DeleteResult(ok=True, detail=params.user_id), message="User added to group.", summary="User to group created.")
 
 
 @chat.function("remove_user_from_group", "Remove a user from an IBM Security Verify group.", action_type="write", chain_callable=True, data_model=DeleteResult, event="ibm-security-verify-connector.remove_user_from_group")
@@ -285,7 +285,7 @@ async def remove_user_from_group(ctx, params: GroupMemberParams) -> ActionResult
         await client.request("PATCH", f"/v2.0/Groups/{params.group_id}", json_body=body)
     except vc.VerifyError as exc:
         return ActionResult.error(str(exc), retryable=exc.retryable)
-    return ActionResult.success(data=DeleteResult(ok=True, detail=params.user_id), message="User removed from group.")
+    return ActionResult.success(data=DeleteResult(ok=True, detail=params.user_id), message="User removed from group.", summary="User from group deleted.")
 
 
 def _application_entity(a: dict) -> VerifyApplication:
@@ -307,7 +307,7 @@ async def list_applications(ctx, params: ListApplicationsParams) -> ActionResult
     except vc.VerifyError as exc:
         return ActionResult.error(str(exc), retryable=exc.retryable)
     items = data if isinstance(data, list) else (data or {}).get("applications", [])
-    return ActionResult.success(data=ApplicationList(applications=[_application_entity(a) for a in items]))
+    return ActionResult.success(data=ApplicationList(applications=[_application_entity(a) for a in items]), summary="Applications listed.")
 
 
 @chat.function("get_application", "Read one IBM Security Verify application registration in full.", action_type="read", chain_callable=True, data_model=VerifyApplication, event="ibm-security-verify-connector.get_application")
@@ -319,7 +319,7 @@ async def get_application(ctx, params: ApplicationIdParams) -> ActionResult:
         data, _ = await client.request("GET", f"/v1.0/applications/{params.application_id}")
     except vc.VerifyError as exc:
         return ActionResult.error(str(exc), retryable=exc.retryable)
-    return ActionResult.success(data=_application_entity(data or {}))
+    return ActionResult.success(data=_application_entity(data or {}), summary="Application retrieved.")
 
 
 def _policy_entity(p: dict) -> VerifyPolicy:
@@ -340,7 +340,7 @@ async def list_policies(ctx, params: ListPoliciesParams) -> ActionResult:
     except vc.VerifyError as exc:
         return ActionResult.error(str(exc), retryable=exc.retryable)
     items = data if isinstance(data, list) else (data or {}).get("policies", [])
-    return ActionResult.success(data=PolicyList(policies=[_policy_entity(p) for p in items]))
+    return ActionResult.success(data=PolicyList(policies=[_policy_entity(p) for p in items]), summary="Policies listed.")
 
 
 @chat.function("get_policy", "Read one IBM Security Verify Access Policy in full (read-only).", action_type="read", chain_callable=True, data_model=VerifyPolicy, event="ibm-security-verify-connector.get_policy")
@@ -352,7 +352,7 @@ async def get_policy(ctx, params: PolicyIdParams) -> ActionResult:
         data, _ = await client.request("GET", f"/v1.0/policies/{params.policy_id}")
     except vc.VerifyError as exc:
         return ActionResult.error(str(exc), retryable=exc.retryable)
-    return ActionResult.success(data=_policy_entity(data or {}))
+    return ActionResult.success(data=_policy_entity(data or {}), summary="Policy retrieved.")
 
 
 def _mfa_entity(f: dict) -> VerifyMfaFactor:
@@ -373,7 +373,7 @@ async def list_user_mfa_factors(ctx, params: ListMfaFactorsParams) -> ActionResu
     except vc.VerifyError as exc:
         return ActionResult.error(str(exc), retryable=exc.retryable)
     items = data if isinstance(data, list) else (data or {}).get("factors", [])
-    return ActionResult.success(data=MfaFactorList(factors=[_mfa_entity(f) for f in items]))
+    return ActionResult.success(data=MfaFactorList(factors=[_mfa_entity(f) for f in items]), summary="User mfa factors listed.")
 
 
 @chat.function("remove_user_mfa_factor", "Remove one enrolled MFA factor from an IBM Security Verify user -- use when a user has lost their device and needs help re-enrolling.", action_type="write", chain_callable=True, data_model=DeleteResult, event="ibm-security-verify-connector.remove_user_mfa_factor")
@@ -385,7 +385,7 @@ async def remove_user_mfa_factor(ctx, params: RemoveMfaFactorParams) -> ActionRe
         await client.request("DELETE", f"/v2.0/factors/{params.user_id}/{params.factor_id}")
     except vc.VerifyError as exc:
         return ActionResult.error(str(exc), retryable=exc.retryable)
-    return ActionResult.success(data=DeleteResult(ok=True, detail=params.factor_id), message="MFA factor removed. The user will need to re-enroll.")
+    return ActionResult.success(data=DeleteResult(ok=True, detail=params.factor_id), message="MFA factor removed. The user will need to re-enroll.", summary="User mfa factor deleted.")
 
 
 def _audit_entity(e: dict) -> VerifyAuditEvent:
@@ -411,7 +411,7 @@ async def list_audit_events(ctx, params: ListAuditEventsParams) -> ActionResult:
     except vc.VerifyError as exc:
         return ActionResult.error(str(exc), retryable=exc.retryable)
     items = data if isinstance(data, list) else (data or {}).get("events", [])
-    return ActionResult.success(data=AuditEventList(events=[_audit_entity(e) for e in items]))
+    return ActionResult.success(data=AuditEventList(events=[_audit_entity(e) for e in items]), summary="Audit events listed.")
 
 
 @chat.function("audit_tenant", "Build one aggregated health report for the connected IBM Security Verify tenant: total/disabled user counts, group/application counts, and recent failed logins.", action_type="read", chain_callable=True, data_model=HealthAudit, event="ibm-security-verify-connector.audit_tenant")
@@ -450,4 +450,4 @@ async def audit_tenant(ctx, params: ConnectionRefParams) -> ActionResult:
         total_groups=total_groups,
         total_applications=total_applications,
         recent_failed_logins=recent_failed_logins,
-    ))
+    ), summary="Tenant audit ready.")
