@@ -31,8 +31,7 @@ def _field(label: str, node: ui.UINode) -> ui.UINode:
 
 def _settings_button() -> ui.UINode:
     return ui.Button(
-        "App settings", variant="secondary", size="sm", full_width=True,
-        icon="Settings", on_click=ui.Call("__panel__verify_settings"),
+        "App settings", variant="secondary", size="sm", icon="Settings", on_click=ui.Call("__panel__verify_settings"),
     )
 
 
@@ -43,6 +42,9 @@ async def verify_sidebar(ctx, **kwargs) -> ui.UINode:
         return ui.Stack(direction="v", gap=3, align="stretch", children=[
             ui.Button("How do I get this?", variant="ghost", size="sm", icon="HelpCircle",
                       on_click=ui.Call("__panel__verify_connect_help")),
+            ui.Button("Sign in with IBM Verify (OIDC / SSO)", variant="primary", size="sm", icon="login"),
+            ui.Divider(),
+            ui.Text("Or connect via API Client Credentials", variant="caption"),
             ui.Form(action="connect_verify", submit_label="Connect", children=[
                 _field("Tenant label", ui.Input(param_name="label", placeholder="e.g. Acme Corp Verify")),
                 _field("Tenant hostname", ui.Input(param_name="tenant_hostname", placeholder="mycompany.verify.ibm.com")),
@@ -58,8 +60,7 @@ async def verify_sidebar(ctx, **kwargs) -> ui.UINode:
         ("Audit Events", "History", "verify_audit_events"),
     ]
     return ui.Stack(direction="v", gap=1, align="stretch", children=[
-        *[ui.Button(label, variant="ghost", size="sm", icon=icon, full_width=True,
-                    on_click=ui.Call(f"__panel__{panel}")) for label, icon, panel in buttons],
+        *[ui.Button(label, variant="ghost", size="sm", icon=icon, on_click=ui.Call(f"__panel__{panel}")) for label, icon, panel in buttons],
         ui.Divider(),
         _settings_button(),
     ])
